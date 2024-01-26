@@ -2,12 +2,12 @@ import { Module } from '@nestjs/common';
 import { SkinsController } from './skins.controller';
 import { SkinsService } from './skins.service';
 import { HttpModule } from '@nestjs/axios';
-import { MyCacheModule } from './cache/myCache.module';
-import { MyCacheService } from './cache/myCache.service';
+import { CacheModuleX } from './cache/cache.module';
+import { CacheService } from './cache/cache.service';
 
 @Module({
-  imports: [MyCacheModule, HttpModule],
+  imports: [CacheModuleX, HttpModule],
   controllers: [SkinsController],
-  providers: [SkinsService, MyCacheService],
+  providers: [SkinsService, CacheService],
 })
 export class SkinsModule {}

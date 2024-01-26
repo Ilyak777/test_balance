@@ -10,10 +10,10 @@ enum filterForItems {
 }
 
 @Injectable()
-export class MyCacheService {
+export class CacheService {
   constructor(@Inject(CACHE_MANAGER) private readonly cacheManager: Cache) {}
 
-  async setItemsCache(items_to_cache: SkinDTO[]) {
+  async set(items_to_cache: SkinDTO[]) {
     try {
       await this.cacheManager.set(filterForItems.tradable_items, {
         items: items_to_cache,
@@ -28,7 +28,7 @@ export class MyCacheService {
     }
   }
 
-  async updateItemsCache(items_to_cache: SkinDTO[]) {
+  async update(items_to_cache: SkinDTO[]) {
     try {
       const currentCache: {
         items: SkinDTO[];
@@ -60,14 +60,25 @@ export class MyCacheService {
     }
   }
 
-  async checkCache() {
+  async check() {
     try {
-      let { items: cachedItems } = await this.cacheManager.get(
-        filterForItems.all_items,
-      );
-      return cachedItems;
+      let items = await this.cacheManager.get(filterForItems.all_items);
+      return items ? { items } : false;
     } catch (error) {
-      console.log(`Ошибка с проверкой кеша в ${nowString()}`);
+      console.log(`${error} при проверке кеша в ${nowString()}`);
+    }
+  }
+
+  async del() {
+    try {
+      if (await this.check()) {
+        await this.cacheManager.del(filterForItems.all_items);
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      console.log(`${error} при удалении кеша в ${nowString()}`);
     }
   }
 }

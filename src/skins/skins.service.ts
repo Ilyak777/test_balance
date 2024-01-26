@@ -1,30 +1,30 @@
 import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { nowString } from 'src/utils/dateNow';
-import { MyCacheService } from './cache/myCache.service';
+import { CacheService } from './cache/cache.service';
 import { SkinDTO } from './dto/skin.dto';
 
 @Injectable()
 export class SkinsService {
   constructor(
     private readonly http: HttpService,
-    readonly cache: MyCacheService,
+    readonly cache: CacheService,
   ) {}
 
   async fetchAndSaveItems() {
     try {
-      const checkCache = await this.cache.checkCache();
+      const checkCache = await this.cache.check();
 
       if (checkCache) {
         return checkCache;
       } else {
         const tradableItems: SkinDTO[] = await this.fetchItems(true);
 
-        await this.cache.setItemsCache(tradableItems);
+        await this.cache.set(tradableItems);
 
         const nonTradableItems: SkinDTO[] = await this.fetchItems(false);
 
-        return await this.cache.updateItemsCache(nonTradableItems);
+        return await this.cache.update(nonTradableItems);
       }
     } catch (error) {
       console.error(

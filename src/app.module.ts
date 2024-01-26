@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { SkinsModule } from './skins/skins.module';
-import { MyCacheModule } from './skins/cache/myCache.module';
+import { CacheModuleX } from './skins/cache/cache.module';
 import { CacheModule } from '@nestjs/cache-manager';
 import { ConfigModule } from '@nestjs/config';
 import { HttpModule } from '@nestjs/axios';
@@ -32,7 +32,7 @@ import { PaymentHistoryModule } from './balance/payment-history/payment-history.
       synchronize: true,
     }),
     SkinsModule,
-    MyCacheModule,
+    CacheModuleX,
     BalanceModule,
     UserModule,
     PaymentHistoryModule,
